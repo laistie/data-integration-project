@@ -6,6 +6,12 @@ SELECT RESPONSEID, AGE, EDLEVEL, LEARNCODE, YEARSCODE, COUNTRY
 FROM STACKOVERFLOW.SO_2023 
 WHERE LEARNCODE IN ('Books / Physical media', 'Coding Bootcamp', 'Other online resources (e.g., videos, blogs, forum)', 'School (i.e., University, College, etc)');
 
+-- IMPORTANT SELECT FILTER FROM SURVEY
+
+DESCRIBE STACKOVERFLOW.SO_2023;
+SELECT * FROM STACKOVERFLOW.SO_2023 WHERE learncode IN ('Books / Physical media', 
+'Coding Bootcamp', 'Other online resources (e.g., videos, blogs, forum)', 
+'School (i.e., University, College, etc)');
 
 -- INITIAL SELECT WITH IMPORTANT DATA FROM 2022 SURVEY
 
@@ -35,27 +41,33 @@ CREATE TABLE learncode (
 );
 
 
--- User-defined function to split string
+-- function to split string
 CREATE OR REPLACE FUNCTION SPLIT_STRING(str VARCHAR2, delim VARCHAR2, pos PLS_INTEGER)
 RETURN VARCHAR2 IS
   i PLS_INTEGER;
+  pos_temp PLS_INTEGER := pos;
 BEGIN
-  WHILE pos > 0 LOOP
-    pos := INSTR(str, delim, 1, pos);
+  WHILE pos_temp > 0 LOOP
+    pos_temp := INSTR(str, delim, 1, pos_temp);
     i := i + 1;
   END LOOP;
   RETURN SUBSTR(str, INSTR(str, delim, 1, i) + 1,
-                INSTR(str, delim, 1, i + 1) - INSTR(str, delim, 1, i) -1);
+    INSTR(str, delim, 1, i + 1) - INSTR(str, delim, 1, i) -1);
 END;
 /
 
 -- Insert data into learncode
-INSERT INTO learncode (resource, user)
-SELECT resource, CONCAT('2023', responseId)
+INSERT ALL
+      INTO LEARNCODE (resourcetype, SOuserId) VALUES (resourceType, CONCAT('2023', responseId))
+      INTO SOUSER (userId, age, country, edlevel, yearscode) VALUES (CONCAT('2023', responseId), age, country, edlevel, yearscode)
+SELECT resourceType, responseId, age, country, edlevel, yearscode
 FROM (
-  SELECT SPLIT_STRING(learncode, ';', LEVEL) AS resource, responseId
-  FROM STACKOVERFLOW.SO_2023
-  CONNECT BY LEVEL <= LENGTH(REGEXP_REPLACE(learncode, '[^;]+')) + 1
+      SELECT SPLIT_STRING(learncode, ';', LEVEL) AS resourceType, responseId, age, country, edlevel, yearscode
+      FROM STACKOVERFLOW.SO_2023
+      CONNECT BY LEVEL <= LENGTH(REGEXP_REPLACE(learncode, '[^;]+')) + 1
 )
-WHERE resource IN ('Books / Physical media', 'Coding Bootcamp', 'Other online resources (e.g., videos, blogs, forum)', 'School (i.e., University, College, etc)');
+WHERE resourceType IN ('Books / Physical media', 
+'Coding Bootcamp', 'Other online resources (e.g., videos, blogs, forum)', 
+'School (i.e., University, College, etc)');
 
+            

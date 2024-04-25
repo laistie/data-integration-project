@@ -2,7 +2,7 @@
 
 CREATE TABLE SOuser (
     userId INT,
-    age INT,
+    age VARCHAR(32),
     country VARCHAR(255),
     edlevel VARCHAR(255),
     yearscode INT,

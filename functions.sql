@@ -17,7 +17,7 @@ BEGIN
     IF splitted IS NOT NULL AND REGEXP_LIKE(responseId, '^[[:digit:]]+$') 
     AND learnresource IN ('Books / Physical media', 'Coding Bootcamp', 
     'Other online resources (e.g., videos, blogs, forum)', 'School (i.e., University, College, etc)') THEN
-      INSERT INTO LEARN (resourcetype, SOuserId) VALUES (splitted, CONCAT('2023', responseId));
+      INSERT INTO LEARN (resourcetype, SOuserId) VALUES (splitted, CONCAT('2023', responseId)); -- 2022
       COMMIT;
     END IF;
     pos_substring := INSTR(learnresource, ';', i);

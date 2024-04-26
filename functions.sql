@@ -1,3 +1,5 @@
+-- Procedure para tratamento dos dados que não estão normalizados.
+
 CREATE OR REPLACE PROCEDURE SPLIT_LEARN(learnresource VARCHAR2, responseId VARCHAR2) IS
   i PLS_INTEGER := 1;
   pos_substring PLS_INTEGER := 1;

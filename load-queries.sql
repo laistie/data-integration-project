@@ -1,5 +1,5 @@
--- load for 2023 survey
-BEGIN
+-- Load da survey de 2023.
+
   FOR rec IN (SELECT responseId, age, country, edlevel, yearscode, learncode FROM STACKOVERFLOW.SO_2023)
   LOOP
     IF rec.yearscode NOT IN ('Less than 1 year', 'More than 50 years', 'YearsCode', 'NA')
@@ -14,7 +14,8 @@ BEGIN
 END;
 /
 
--- load for 2022 survey
+-- Load da survey de 2022.
+
 BEGIN
   FOR rec IN (SELECT responseId, age, country, edlevel, yearscode, learncode FROM STACKOVERFLOW.SO_2022)
   LOOP

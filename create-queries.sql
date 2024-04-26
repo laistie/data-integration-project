@@ -1,4 +1,4 @@
--- creating tables
+-- Criação das tabelas.
 
 CREATE TABLE SOuser (
     userId INT,
